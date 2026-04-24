@@ -56,35 +56,35 @@ gcc -o scheduler scheduler.c
 ### Process Input + FCFS Scheduling
 Enter process details once; the algorithm menu appears after. FCFS executes processes in arrival order.
 
-![FCFS](Screenshot%202026-04-24%20at%2016.02.03.png)
+![FCFS](Screenshots/Screenshot%202026-04-24%20at%2016.02.03.png)
 
 ---
 
 ### SJF — Non-Preemptive
 The process with the shortest burst time among arrived processes is scheduled next.
 
-![SJF](Screenshot%202026-04-24%20at%2016.02.37.png)
+![SJF](Screenshots/Screenshot%202026-04-24%20at%2016.02.37.png)
 
 ---
 
 ### Round Robin (Quantum = 3)
 Each process gets a fixed time slice; remaining burst is re-queued until completion.
 
-![Round Robin](Screenshot%202026-04-24%20at%2016.02.51.png)
+![Round Robin](Screenshots/Screenshot%202026-04-24%20at%2016.02.51.png)
 
 ---
 
 ### Priority — Non-Preemptive
 Among arrived processes, the one with the lowest priority number runs to completion first.
 
-![Priority](Screenshot%202026-04-24%20at%2016.03.06.png)
+![Priority](Screenshots/Screenshot%202026-04-24%20at%2016.03.06.png)
 
 ---
 
 ### Exit
 Choosing option 5 exits the simulator cleanly.
 
-![Exit](Screenshot%202026-04-24%20at%2016.03.23.png)
+![Exit](Screenshots/Screenshot%202026-04-24%20at%2016.03.23.png)
 
 ---
 
@@ -92,7 +92,8 @@ Choosing option 5 exits the simulator cleanly.
 
 ```
 CPU Scheduling Simulator/
-├── scheduler.c   # All source code (single file)
+├── scheduler.c      # All source code (single file)
+├── Screenshots/     # Demo screenshots
 └── README.md
 ```
 
