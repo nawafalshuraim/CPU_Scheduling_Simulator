@@ -10,8 +10,8 @@
      int pid;
      int arrival;
      int burst;
-     int priority;       // Lower value = higher priority          */
-     int remaining;      // To be used by the Round Robin                    */
+     int priority;       // Lower value = higher priority          
+     int remaining;      // To be used by the Round Robin                    
      int waiting;
      int turnaround;
      int finish;
