@@ -88,6 +88,213 @@ Choosing option 5 exits the simulator cleanly.
 
 ---
 
+## Framework Diagram
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    CPU Scheduling Simulator             │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│   ┌──────────────┐        ┌──────────────────────────┐  │
+│   │ Input Module │        │     Scheduling Module    │  │
+│   │──────────────│        │──────────────────────────│  │
+│   │inputProcesses│──────▶ │ fcfs()                   │  │
+│   │resetProcesses│        │ sjfNonPreemptive()        │ │
+│   └──────────────┘        │ roundRobin()              │ │
+│                           │ priorityNonPreemptive()   │ │
+│                           └────────────┬─────────────┘  │
+│                                        │                │
+│                           ┌────────────▼─────────────┐  │
+│                           │  Calculation Module      │  │
+│                           │──────────────────────────│  │
+│                           │  calculateMetrics()      │  │
+│                           └────────────┬─────────────┘  │
+│                                        │                │
+│                           ┌────────────▼─────────────┐  │
+│                           │    Output Module         │  │
+│                           │──────────────────────────│  │
+│                           │  printGantt()            │  │
+│                           │  displayResults()        │  │
+│                           └──────────────────────────┘  │
+│                                                         │
+│   ┌──────────────────────────────────────────────────┐  │
+│   │                  main()                          │  │
+│   │  Menu loop → dispatches to Scheduling Module     │  │
+│   └──────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Workflow Diagram
+
+```
+          ┌─────────────────────┐
+          │        START        │
+          └──────────┬──────────┘
+                     │
+          ┌──────────▼──────────┐
+          │  Enter number of    │◀──────┐
+          │  processes (1–100)  │       │ Invalid
+          └──────────┬──────────┘       │
+                     │ Valid            │
+          ┌──────────▼──────────┐       │
+          │ Input arrival time, │       │
+          │ burst time, priority│───────┘
+          │ for each process    │ (re-prompt on invalid)
+          └──────────┬──────────┘
+                     │
+          ┌──────────▼──────────┐
+          │   Algorithm Menu    │◀─────────────────┐
+          │  1. FCFS            │                  │
+          │  2. SJF             │                  │
+          │  3. Round Robin     │                  │
+          │  4. Priority        │                  │
+          │  5. Exit            │                  │
+          └──────────┬──────────┘                  │
+                     │                             │
+       ┌─────────────┼─────────────────────────┐   │
+       │             │             │           │   │
+  ┌────▼───┐   ┌─────▼──┐  ┌──────▼──┐  ┌─────▼──┐ │
+  │  FCFS  │   │  SJF   │  │Round    │  │Priority│ │
+  │        │   │        │  │Robin    │  │        │ │
+  └────┬───┘   └─────┬──┘  └──────┬──┘  └─────┬──┘ │
+       └─────────────┴────────────┴────────────┘   │
+                     │                             │
+          ┌──────────▼──────────┐                  │
+          │ calculateMetrics()  │                  │
+          │  TAT = Finish−Arrival│                 │
+          │  WT  = TAT − Burst  │                  │
+          └──────────┬──────────┘                  │
+                     │                             │
+          ┌──────────▼──────────┐                  │
+          │   printGantt()      │                  │
+          │   displayResults()  │                  │
+          └──────────┬──────────┘                  │
+                     │                             │
+          ┌──────────▼──────────┐                  │
+          │  Run another algo?  │──── Yes ─────────┘
+          └──────────┬──────────┘
+                  No │
+          ┌──────────▼──────────┐
+          │         END         │
+          └─────────────────────┘
+```
+
+---
+
+## Evaluation Metrics and Results
+
+All four algorithms were run on the **same process set** to allow a direct comparison.
+
+### Test Processes
+
+| Process | Arrival Time | Burst Time | Priority |
+|---------|-------------|------------|----------|
+| P1      | 0           | 6          | 2        |
+| P2      | 1           | 4          | 1        |
+| P3      | 2           | 2          | 3        |
+| P4      | 3           | 5          | 2        |
+
+---
+
+### FCFS — First-Come-First-Served
+
+```
+Gantt Chart:
+ +-----------------------+---------------+-------+-------------------+
+ |          P1           |      P2       |  P3   |        P4         |
+ +-----------------------+---------------+-------+-------------------+
+ 0                       6              10      12                  17
+```
+
+| Process | Arrival | Burst | Finish | Waiting | Turnaround |
+|---------|---------|-------|--------|---------|------------|
+| P1      | 0       | 6     | 6      | 0       | 6          |
+| P2      | 1       | 4     | 10     | 5       | 9          |
+| P3      | 2       | 2     | 12     | 8       | 10         |
+| P4      | 3       | 5     | 17     | 9       | 14         |
+
+> **Avg Waiting Time: 5.50 &nbsp;|&nbsp; Avg Turnaround Time: 9.75**
+
+---
+
+### SJF — Shortest Job First (Non-Preemptive)
+
+```
+Gantt Chart:
+ +-----------------------+-------+---------------+-------------------+
+ |          P1           |  P3   |      P2       |        P4         |
+ +-----------------------+-------+---------------+-------------------+
+ 0                       6       8              12                  17
+```
+
+| Process | Arrival | Burst | Finish | Waiting | Turnaround |
+|---------|---------|-------|--------|---------|------------|
+| P1      | 0       | 6     | 6      | 0       | 6          |
+| P2      | 1       | 4     | 12     | 7       | 11         |
+| P3      | 2       | 2     | 8      | 4       | 6          |
+| P4      | 3       | 5     | 17     | 9       | 14         |
+
+> **Avg Waiting Time: 5.00 &nbsp;|&nbsp; Avg Turnaround Time: 9.25**
+
+---
+
+### Round Robin (Quantum = 2)
+
+```
+Gantt Chart:
+ +-------+-------+-------+-------+-------+-------+-------+-------+---+
+ |  P1   |  P2   |  P3   |  P1   |  P4   |  P2   |  P1   |  P4   |P4 |
+ +-------+-------+-------+-------+-------+-------+-------+-------+---+
+ 0       2       4       6       8      10      12      14      16  17
+```
+
+| Process | Arrival | Burst | Finish | Waiting | Turnaround |
+|---------|---------|-------|--------|---------|------------|
+| P1      | 0       | 6     | 14     | 8       | 14         |
+| P2      | 1       | 4     | 12     | 7       | 11         |
+| P3      | 2       | 2     | 6      | 2       | 4          |
+| P4      | 3       | 5     | 17     | 9       | 14         |
+
+> **Avg Waiting Time: 6.50 &nbsp;|&nbsp; Avg Turnaround Time: 10.75**
+
+---
+
+### Priority Scheduling (Non-Preemptive)
+
+```
+Gantt Chart:
+ +-----------------------+---------------+-------------------+-------+
+ |          P1           |      P2       |        P4         |  P3   |
+ +-----------------------+---------------+-------------------+-------+
+ 0                       6              10                  15      17
+```
+
+| Process | Arrival | Burst | Finish | Waiting | Turnaround |
+|---------|---------|-------|--------|---------|------------|
+| P1      | 0       | 6     | 6      | 0       | 6          |
+| P2      | 1       | 4     | 10     | 5       | 9          |
+| P3      | 2       | 2     | 17     | 13      | 15         |
+| P4      | 3       | 5     | 15     | 7       | 12         |
+
+> **Avg Waiting Time: 6.25 &nbsp;|&nbsp; Avg Turnaround Time: 10.50**
+
+---
+
+### Algorithm Comparison
+
+| Algorithm              | Avg Waiting Time | Avg Turnaround Time | Best For |
+|------------------------|-----------------|---------------------|----------|
+| FCFS                   | 5.50            | 9.75                | Simple, fair ordering |
+| SJF (Non-Preemptive)   | **5.00**        | **9.25**            | Minimizing average wait |
+| Round Robin (Q=2)      | 6.50            | 10.75               | Fair time-sharing, interactive systems |
+| Priority (Non-Preemptive) | 6.25         | 10.50               | Critical task prioritization |
+
+> SJF achieves the lowest average waiting and turnaround times for this test case, which is consistent with the theoretical optimality of SJF for non-preemptive scheduling. Round Robin has higher averages but ensures no process is starved.
+
+---
+
 ## Project Structure
 
 ```
