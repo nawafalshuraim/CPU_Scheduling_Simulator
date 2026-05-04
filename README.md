@@ -1,6 +1,6 @@
 # CPU Scheduling Simulator
 
-A terminal-based CPU scheduling simulator written in C. It supports four classic scheduling algorithms, renders ASCII Gantt charts, and reports per-process metrics along with average waiting and turnaround times.
+A CPU scheduling simulator with a **Flutter desktop UI** and all scheduling logic written in **C**. Supports four classic algorithms, renders a visual Gantt chart, and reports per-process metrics with average waiting and turnaround times. The C core is called directly from Flutter via FFI — no logic was rewritten.
 
 ---
 
@@ -53,38 +53,45 @@ gcc -o scheduler scheduler.c
 
 ## Screenshots
 
-### Process Input + FCFS Scheduling
-Enter process details once; the algorithm menu appears after. FCFS executes processes in arrival order.
+### Process Input — FCFS Selected
+Enter process details, pick an algorithm from the sidebar or the chip selector, then hit **Run Simulation**.
 
-![FCFS](Screenshots/Screenshot%202026-04-24%20at%2016.02.03.png)
-
----
-
-### SJF — Non-Preemptive
-The process with the shortest burst time among arrived processes is scheduled next.
-
-![SJF](Screenshots/Screenshot%202026-04-24%20at%2016.02.37.png)
+![Input FCFS](ScreenshotsWithUI/Screenshot%202026-05-04%20at%2016.44.54.png)
 
 ---
 
-### Round Robin (Quantum = 3)
-Each process gets a fixed time slice; remaining burst is re-queued until completion.
+### FCFS — Results
+Colored Gantt chart with time markers, per-process table, and average metric cards.
 
-![Round Robin](Screenshots/Screenshot%202026-04-24%20at%2016.02.51.png)
+![FCFS Results](ScreenshotsWithUI/Screenshot%202026-05-04%20at%2016.45.04.png)
 
 ---
 
-### Priority — Non-Preemptive
+### SJF — Results
+Shortest Job First schedules the process with the least remaining burst time next.
+
+![SJF Results](ScreenshotsWithUI/Screenshot%202026-05-04%20at%2016.45.17.png)
+
+---
+
+### Process Input — Round Robin Selected
+Selecting Round Robin reveals the Time Quantum field below the algorithm picker.
+
+![Input Round Robin](ScreenshotsWithUI/Screenshot%202026-05-04%20at%2016.45.29.png)
+
+---
+
+### Round Robin — Results (Quantum = 3)
+Each process gets a fixed time slice; the Gantt chart shows the interleaved execution clearly.
+
+![Round Robin Results](ScreenshotsWithUI/Screenshot%202026-05-04%20at%2016.45.38.png)
+
+---
+
+### Priority — Results
 Among arrived processes, the one with the lowest priority number runs to completion first.
 
-![Priority](Screenshots/Screenshot%202026-04-24%20at%2016.03.06.png)
-
----
-
-### Exit
-Choosing option 5 exits the simulator cleanly.
-
-![Exit](Screenshots/Screenshot%202026-04-24%20at%2016.03.23.png)
+![Priority Results](ScreenshotsWithUI/Screenshot%202026-05-04%20at%2016.45.52.png)
 
 ---
 
